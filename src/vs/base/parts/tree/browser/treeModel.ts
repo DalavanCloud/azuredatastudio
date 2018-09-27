@@ -980,17 +980,26 @@ export class TreeModel {
 	}
 
 	public refresh(element: any = null, recursive: boolean = true): WinJS.Promise {
-		var item = this.getItem(element);
+		var item: Item = this.getItem(element);
 
 		if (!item) {
 			return WinJS.TPromise.as(null);
 		}
+
+		this.applyChange(item.getElement(), element);
 
 		var eventData: IRefreshEvent = { item: item, recursive: recursive };
 		this._onRefresh.fire(eventData);
 		return item.refresh(recursive).then(() => {
 			this._onDidRefresh.fire(eventData);
 		});
+	}
+
+	private applyChange(target: any, source: any): void {
+		if (target && source && target instanceof Object && source instanceof Object) {
+			Object.keys(source).forEach(property => { target[property] = source[property]; });
+			target.checked = source.checked;
+		}
 	}
 
 	public expand(element: any): WinJS.Promise {

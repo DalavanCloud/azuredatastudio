@@ -141,8 +141,9 @@ export class TreeComponentRenderer extends Disposable implements IRenderer {
 		dom.toggleClass(templateData.icon, 'model-view-tree-node-item-icon', !!icon);
 		if (element) {
 			element.onCheckedChanged = (checked: boolean) => {
+				element.checked = checked;
 				this._dataProvider.onNodeCheckedChanged(element.handle, checked);
-			}
+			};
 			templateData.model = element;
 		}
 		if (templateId === TreeComponentRenderer.DEFAULT_TEMPLATE) {
